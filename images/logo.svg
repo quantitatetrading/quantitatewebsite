@@ -1,0 +1,16 @@
+<svg id = "logo" version="1.1" viewBox="25 45 160 210" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <metadata>
+                <rdf:RDF>
+                <cc:Work rdf:about="">
+                <dc:format>image/svg+xml</dc:format>
+                <dc:title/>
+                <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+                </cc:Work>
+                </rdf:RDF>
+                </metadata>
+                <g>
+                <path d="m43.465 98.328-18.974 17.614l-0.1512-30.242 43.845-42.333-0.60419 155.95 18.974-17.614 0.15119 30.242-43.845 42.333z"/>
+                <path d="m92.715 97.911-18.974 17.614-0.1512-30.242l43.845-42.333-0.60419 155.95 18.974-17.614 0.15119 30.242-43.845 42.333z"/>
+                <path d="m142.46 97.684-18.974 17.614-0.1512-30.242 43.845-42.333-0.60419 155.95 18.974-17.614 0.15119 30.242-43.845 42.333z"/>
+                </g>
+</svg>

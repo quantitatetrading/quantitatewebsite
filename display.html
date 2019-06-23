@@ -1,0 +1,686 @@
+<script src="https://code.jquery.com/jquery-3.1.1.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+<style>
+    #button {
+        z-index: 100!important;
+        background-color: #007BC7;
+        width: 100px;
+        height: 50px;
+        position: fixed;
+        bottom: 0;
+        left: 5%;
+        z-index: 100;
+        border-radius: 5px 5px 0 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+    
+    #container {
+        z-index: 20 !important;
+        margin: 0 5% 0 5%;
+        height: 50%;
+        width: 90%;
+        position: fixed;
+        bottom: -50%;
+        left: 0;
+        border: 10px solid #007BC7;
+        border-bottom-width: 0;
+        background-color: white;
+        padding: 20px 20px 0 20px;
+    }
+    
+    #arrow {
+        width: 50%;
+    }
+    
+    #arrow * {
+        stroke: white;
+    }
+    
+    #graph-type {
+        z-index: 3;
+        width: 100%;
+        height: 30px;
+        position: relative;
+        padding-left: 0;
+        margin: 0
+    }
+    
+    #graphcell {
+        /* width: 100%; */
+        padding: 5px;
+    }
+    
+    #data {
+        padding: 5px;
+        width: 150px;
+        vertical-align: top;
+        text-align: left;
+    }
+    
+    #data p {
+        font-size: 15px;
+        padding: 5px;
+    }
+    
+    .display {
+        border-collapse: separate;
+        border-spacing: 5px;
+        width: 100%;
+    }
+    
+    .display td {
+        background-color: #eee;
+        border-radius: 5px;
+    }
+</style>
+<div id="button">
+    <svg id="arrow" width="26.196mm" height="10.853mm" version="1.1" viewBox="0 0 26.196079 10.853057" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <metadata>
+  <rdf:RDF>
+  <cc:Work rdf:about="">
+  <dc:format>image/svg+xml</dc:format>
+  <dc:title/>
+  </cc:Work>
+  </rdf:RDF>
+  </metadata>
+  <g transform="translate(-68.209 -163.5)">
+  <path d="m69.548 173.02 11.495-8.1962h0.52917l11.495 8.1962" fill="none" stroke="#000" stroke-linecap="round" stroke-width="2.6458"/>
+  </g>
+  </svg>
+
+</div>
+<div id="container">
+    <table class="display">
+        <tr>
+            <td id="graphcell">
+                <div id="graph"></div>
+            </td>
+            <td id="data">
+                <p>Chart Type:</p>
+                <select id="graph-type" class="form-control select-xs">
+          <option value="candlestick">Candlestick</option>
+          <option value="line">Line</option>
+        </select>
+                <p>Return: <span style="color:#237bc7; font-size: 20px;" id="change">--</span> %</p>
+                <td>
+        </tr>
+    </table>
+</div>
+<script>
+    var graph = {}
+
+    $('#button').on('click', function() {
+        if ($(window).height() - $('#button').offset().top - $('#button').outerHeight(true) == 0) {
+            $('#container').animate({
+                bottom: '0'
+            });
+            $('#button').animate({
+                bottom: '50%'
+            });
+            AnimateRotate(0, 180)
+        } else {
+            AnimateRotate(180, 360)
+            $('#container').animate({
+                bottom: '-50%'
+            });
+            $('#button').animate({
+                bottom: '0'
+            });
+
+        }
+    })
+
+    function AnimateRotate(start, angle) {
+        // caching the object for performance reasons
+        var $elem = $('#arrow');
+
+        // we use a pseudo object for the animation
+        // (starts from `0` to `angle`), you can name it as you want
+        $({
+            deg: start
+        }).animate({
+            deg: angle
+        }, {
+            duration: 500,
+            step: function(now) {
+                // in the step-callback (that is fired each step of the animation),
+                // you can use the `now` paramter which contains the current
+                // animation-position (`0` up to `angle`)
+                $elem.css({
+                    transform: 'rotate(' + now + 'deg)'
+                });
+            }
+        });
+    }
+
+    graph = {
+        dataInternal: 10,
+        dataListener: function(val) {},
+        set data(val) {
+            this.dataInternal = val;
+            this.dataListener(val);
+        },
+        get data() {
+            return this.dataInternal;
+        },
+        registerListener: function(listener) {
+            this.dataListener = listener;
+        }
+    }
+
+    require.config({
+        packages: [{
+            name: 'highcharts',
+            main: 'highstock'
+        }],
+        paths: {
+            'highcharts': 'https://code.highcharts.com/stock'
+        }
+    });
+    require(['highcharts'], function(Highcharts) {
+
+        var dataTypes = {
+            5: 'tOHLC',
+            1: 'tPrice',
+            4: 'OHLC',
+            0: 'price',
+        }
+
+        function afterSetExtremes(e) {
+            try {
+
+                var open;
+                var close;
+
+                var length = graph.dataInternal[0].length
+
+                var dataType = dataTypes[length]
+
+                for (i = 0; i < length; i++) {
+                    if (0 <= graph.dataInternal[i][0] - e.min) {
+                        open = graph.dataInternal[i][(dataType[0] == 't') ? 1 : 0]
+                        break;
+                    }
+                }
+
+                var i = graph.dataInternal.length - 1
+                while (i > -1) {
+                    if (0 >= graph.dataInternal[i][0] - e.max) {
+                        close = graph.dataInternal[i][length - 1]
+                        break;
+                    }
+                    i = i - 1
+                }
+
+                var change = ((open != 0) ? 100 * (close - open) / open : 100 * (close - open)).toString()
+
+                change = change.substring(0, (5 == change.indexOf('.') + 1) ? 4 : 5)
+
+                $('#change').text(change)
+
+                console.log('HEY', dataType, open, close, change, graph.dataInternal)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        var data;
+
+        chart = new Highcharts.stockChart('graph', {
+
+            chart: {
+                zoomType: 'x'
+            },
+
+            rangeSelector: {
+                selected: 5
+            },
+
+            title: {
+                text: 'Price'
+            },
+            rangeSelector: {
+                buttons: [{
+                    type: 'day',
+                    count: 1,
+                    text: '1d'
+                }, {
+                    type: 'month',
+                    count: 1,
+                    text: '1m'
+                }, {
+                    type: 'year',
+                    count: 1,
+                    text: '1y'
+                }, {
+                    type: 'all',
+                    text: 'All'
+                }],
+                inputEnabled: false,
+                selected: 4
+            },
+            yAxis: [{
+                labels: {
+                    align: 'right',
+                    x: -3
+                },
+                height: '60%',
+                lineWidth: 2,
+                resize: {
+                    enabled: true
+                }
+            }],
+
+            xAxis: {
+                events: {
+                    afterSetExtremes: afterSetExtremes
+                },
+            },
+
+            tooltip: {
+                split: true
+            },
+
+            credits: {
+                enabled: false
+            },
+
+            series: [{
+                data: data,
+                type: 'candlestick',
+                name: 'Price',
+                color: '#007BC7'
+            }]
+        });
+
+        $('#graph-type').on('change', function() {
+
+            var serie = chart.series[0]
+
+            chart.addSeries({
+                data: graph.dataInternal,
+                type: this.value,
+                name: 'Price',
+                color: '#007BC7'
+            }, false)
+
+            serie.remove(false);
+
+            chart.redraw();
+        });
+
+        graph.registerListener(function(data) {
+
+            try {
+                afterSetExtremes({
+                    min: data[0][0],
+                    max: data[data.length - 1][0]
+                })
+            } catch (e) {
+                console.log(data, data.length)
+                console.log(e)
+            }
+
+            chart.series[0].update({
+                "data": data
+            });
+        });
+
+        $.ajax({
+            dataType: "json",
+            url: 'https://quantitate.trade/getData/MSFT&2000-01-01&2020-10-10',
+            async: false,
+            success: function(data) {
+                graph['data'] = data;
+            }
+        });
+
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+<style>
+    #button {
+        z-index: 100!important;
+        background-color: #007BC7;
+        width: 100px;
+        height: 50px;
+        position: fixed;
+        bottom: 0;
+        left: 5%;
+        z-index: 100;
+        border-radius: 5px 5px 0 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+    
+    #container {
+        z-index: 20 !important;
+        margin: 0 5% 0 5%;
+        height: 50%;
+        width: 90%;
+        position: fixed;
+        bottom: -50%;
+        left: 0;
+        border: 10px solid #007BC7;
+        border-bottom-width: 0;
+        background-color: white;
+        padding: 20px 20px 0 20px;
+    }
+    
+    #arrow {
+        width: 50%;
+    }
+    
+    #arrow * {
+        stroke: white;
+    }
+    
+    #graph-type {
+        z-index: 3;
+        width: 100%;
+        height: 30px;
+        position: relative;
+        padding-left: 0;
+        margin: 0
+    }
+    
+    #graphcell {
+        /* width: 100%; */
+        padding: 5px;
+    }
+    
+    #data {
+        padding: 5px;
+        width: 150px;
+        vertical-align: top;
+        text-align: left;
+    }
+    
+    #data p {
+        font-size: 15px;
+        padding: 5px;
+    }
+    
+    .display {
+        border-collapse: separate;
+        border-spacing: 5px;
+        width: 100%;
+    }
+    
+    .display td {
+        background-color: #eee;
+        border-radius: 5px;
+    }
+</style>
+<div id="button">
+    <svg id="arrow" width="26.196mm" height="10.853mm" version="1.1" viewBox="0 0 26.196079 10.853057" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <metadata>
+  <rdf:RDF>
+  <cc:Work rdf:about="">
+  <dc:format>image/svg+xml</dc:format>
+  <dc:title/>
+  </cc:Work>
+  </rdf:RDF>
+  </metadata>
+  <g transform="translate(-68.209 -163.5)">
+  <path d="m69.548 173.02 11.495-8.1962h0.52917l11.495 8.1962" fill="none" stroke="#000" stroke-linecap="round" stroke-width="2.6458"/>
+  </g>
+  </svg>
+
+</div>
+<div id="container">
+    <table class="display">
+        <tr>
+            <td id="graphcell">
+                <div id="graph"></div>
+            </td>
+            <td id="data">
+                <p>Chart Type:</p>
+                <select id="graph-type" class="form-control select-xs">
+          <option value="candlestick">Candlestick</option>
+          <option value="line">Line</option>
+        </select>
+                <p>Return: <span style="color:#237bc7; font-size: 20px;" id="change">--</span> %</p>
+                <td>
+        </tr>
+    </table>
+</div>
+<script>
+    var graph = {}
+
+    $('#button').on('click', function() {
+        if ($(window).height() - $('#button').offset().top - $('#button').outerHeight(true) == 0) {
+            $('#container').animate({
+                bottom: '0'
+            });
+            $('#button').animate({
+                bottom: '50%'
+            });
+            AnimateRotate(0, 180)
+        } else {
+            AnimateRotate(180, 360)
+            $('#container').animate({
+                bottom: '-50%'
+            });
+            $('#button').animate({
+                bottom: '0'
+            });
+
+        }
+    })
+
+    function AnimateRotate(start, angle) {
+        // caching the object for performance reasons
+        var $elem = $('#arrow');
+
+        // we use a pseudo object for the animation
+        // (starts from `0` to `angle`), you can name it as you want
+        $({
+            deg: start
+        }).animate({
+            deg: angle
+        }, {
+            duration: 500,
+            step: function(now) {
+                // in the step-callback (that is fired each step of the animation),
+                // you can use the `now` paramter which contains the current
+                // animation-position (`0` up to `angle`)
+                $elem.css({
+                    transform: 'rotate(' + now + 'deg)'
+                });
+            }
+        });
+    }
+
+    graph = {
+        dataInternal: 10,
+        dataListener: function(val) {},
+        set data(val) {
+            this.dataInternal = val;
+            this.dataListener(val);
+        },
+        get data() {
+            return this.dataInternal;
+        },
+        registerListener: function(listener) {
+            this.dataListener = listener;
+        }
+    }
+
+    require.config({
+        packages: [{
+            name: 'highcharts',
+            main: 'highstock'
+        }],
+        paths: {
+            'highcharts': 'https://code.highcharts.com/stock'
+        }
+    });
+    require(['highcharts'], function(Highcharts) {
+
+        var dataTypes = {
+            5: 'tOHLC',
+            1: 'tPrice',
+            4: 'OHLC',
+            0: 'price',
+        }
+
+        function afterSetExtremes(e) {
+            try {
+
+                var open;
+                var close;
+
+                var length = graph.dataInternal[0].length
+
+                var dataType = dataTypes[length]
+
+                for (i = 0; i < length; i++) {
+                    if (0 <= graph.dataInternal[i][0] - e.min) {
+                        open = graph.dataInternal[i][(dataType[0] == 't') ? 1 : 0]
+                        break;
+                    }
+                }
+
+                var i = graph.dataInternal.length - 1
+                while (i > -1) {
+                    if (0 >= graph.dataInternal[i][0] - e.max) {
+                        close = graph.dataInternal[i][length - 1]
+                        break;
+                    }
+                    i = i - 1
+                }
+
+                var change = ((open != 0) ? 100 * (close - open) / open : 100 * (close - open)).toString()
+
+                change = change.substring(0, (5 == change.indexOf('.') + 1) ? 4 : 5)
+
+                $('#change').text(change)
+
+                console.log('HEY', dataType, open, close, change, graph.dataInternal)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        var data;
+
+        chart = new Highcharts.stockChart('graph', {
+
+            chart: {
+                zoomType: 'x'
+            },
+
+            rangeSelector: {
+                selected: 5
+            },
+
+            title: {
+                text: 'Price'
+            },
+            rangeSelector: {
+                buttons: [{
+                    type: 'day',
+                    count: 1,
+                    text: '1d'
+                }, {
+                    type: 'month',
+                    count: 1,
+                    text: '1m'
+                }, {
+                    type: 'year',
+                    count: 1,
+                    text: '1y'
+                }, {
+                    type: 'all',
+                    text: 'All'
+                }],
+                inputEnabled: false,
+                selected: 4
+            },
+            yAxis: [{
+                labels: {
+                    align: 'right',
+                    x: -3
+                },
+                height: '60%',
+                lineWidth: 2,
+                resize: {
+                    enabled: true
+                }
+            }],
+
+            xAxis: {
+                events: {
+                    afterSetExtremes: afterSetExtremes
+                },
+            },
+
+            tooltip: {
+                split: true
+            },
+
+            credits: {
+                enabled: false
+            },
+
+            series: [{
+                data: data,
+                type: 'candlestick',
+                name: 'Price',
+                color: '#007BC7'
+            }]
+        });
+
+        $('#graph-type').on('change', function() {
+
+            var serie = chart.series[0]
+
+            chart.addSeries({
+                data: graph.dataInternal,
+                type: this.value,
+                name: 'Price',
+                color: '#007BC7'
+            }, false)
+
+            serie.remove(false);
+
+            chart.redraw();
+        });
+
+        graph.registerListener(function(data) {
+
+            try {
+                afterSetExtremes({
+                    min: data[0][0],
+                    max: data[data.length - 1][0]
+                })
+            } catch (e) {
+                console.log(data, data.length)
+                console.log(e)
+            }
+
+            chart.series[0].update({
+                "data": data
+            });
+        });
+
+        $.ajax({
+            dataType: "json",
+            url: 'https://quantitate.trade/getData/MSFT&2000-01-01&2020-10-10',
+            async: false,
+            success: function(data) {
+                graph['data'] = data;
+            }
+        });
+
+    });
+</script>

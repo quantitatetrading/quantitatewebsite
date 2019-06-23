@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Quantitate</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Overpass" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="./js/jquery-connections/jquery.connections.js"></script>
+</head>
+
+<body>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="./js/nodescript.js"></script>
+    <div id="top">
+        <div id="navbar">
+            <svg id="logo" version="1.1" viewBox="25 45 160 210" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <metadata>
+                        <rdf:RDF>
+                        <cc:Work rdf:about="">
+                        <dc:format>image/svg+xml</dc:format>
+                        <dc:title/>
+                        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+                        </cc:Work>
+                        </rdf:RDF>
+                        </metadata>
+                        <g>
+                        <path d="m43.465 98.328-18.974 17.614l-0.1512-30.242 43.845-42.333-0.60419 155.95 18.974-17.614 0.15119 30.242-43.845 42.333z"/>
+                        <path d="m92.715 97.911-18.974 17.614-0.1512-30.242l43.845-42.333-0.60419 155.95 18.974-17.614 0.15119 30.242-43.845 42.333z"/>
+                        <path d="m142.46 97.684-18.974 17.614-0.1512-30.242 43.845-42.333-0.60419 155.95 18.974-17.614 0.15119 30.242-43.845 42.333z"/>
+                        </g>
+        </svg>
+            <span style="float:right">
+          <h3>Get Started</h3>
+          <h3>About</h3>
+         
+      </span>
+        </div>
+        <div id="content">
+            <h1>Interesting Information</h1>
+            <h4>Nam quis dui eros. Nam ut porta nisl. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi a ex commodo, tristique enim eget, semper ipsum. Integer eget vehicula elit. Curabitur suscipit turpis
+                nec magna faucibus facilisis.</h4>
+            <div class="button">link</div>
+            <div class="button">link</div>
+        </div>
+    </div>
+    <div class="box">
+        <h2>A very important introduction resembling speech</h2>
+        <div class="wrapper">
+        </div>
+    </div>
+    <div id="graphing">
+        <div class='cont'>
+            <div id="search">
+                <h1>Minutely Data for 3000 tickers</h1>
+                <input id="inputSearch" type="text" onkeyup="search()" placeholder="Search for names.." title="Type in a name">
+                <ul id="tickers">
+                </ul>
+            </div>
+            <div id="container"></div>
+            <table>
+                <tr>
+                    <td>
+                        <h5>Why is this important?</h5>
+                        <p>
+                            Duis nec ante ac justo sollicitudin auctor. Ut vulputate feugiat cursus. Nulla at maximus purus, mattis cursus risus. Nulla facilisi. Nunc a feugiat arcu. Nam quam purus, fermentum vel mauris nec, accumsan bibendum velit. Class aptent taciti sociosqu
+                            ad litora torquent per conubia nostra, per inceptos himenaeos. Ut placerat velit orci, sit amet congue enim pharetra eu. Quisque viverra feugiat maximus.
+                        </p>
+                    </td>
+                    <td>
+
+                        <h5>Another Important Feature</h5>
+                        <p>
+                            Nunc sodales pharetra urna non rhoncus. Praesent id dignissim mi. Aenean ipsum lacus, vulputate in odio eu, finibus facilisis erat. Donec luctus sem a ex tristique, in dictum tellus aliquet. Etiam vitae turpis at est elementum bibendum.
+                        </p>
+                    </td>
+            </table>
+        </div>
+    </div>
+    <div id="features">
+        <table>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="feature" id="one">
+                        <h1>Feature 1</h1>
+                        <p>
+                            Nunc sodales pharetra urna non rhoncus. Praesent id dignissim mi. Aenean ipsum lacus, vulputate in odio eu, finibus facilisis erat. Donec luctus sem a ex tristique, in dictum tellus aliquet. Etiam vitae turpis at est elementum bibendum.
+                        </p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+    </div>
+    <div class="feature" id="two">
+        <h1>Feature 2</h1>
+        <p>
+            Nunc sodales pharetra urna non rhoncus. Praesent id dignissim mi. Aenean ipsum lacus, vulputate in odio eu, finibus facilisis erat. Donec luctus sem a ex tristique, in dictum tellus aliquet. Etiam vitae turpis at est elementum bibendum.
+        </p>
+    </div>
+    </td>
+    <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <div class="feature" id="three">
+                <h1>Feature 3</h1>
+                <p>
+                    Nunc sodales pharetra urna non rhoncus. Praesent id dignissim mi. Aenean ipsum lacus, vulputate in odio eu, finibus facilisis erat. Donec luctus sem a ex tristique, in dictum tellus aliquet. Etiam vitae turpis at est elementum bibendum.
+                </p>
+            </div>
+        </td>
+    </tr>
+    </table>
+    <script>
+        $('#one, #two').connections();
+        $('#two, #three').connections();
+        window.onresize = function() {
+            $('.feature').connections('remove');
+            $('#one, #two').connections();
+            $('#two, #three').connections();
+        }
+    </script>
+    </div>
+    <div class="arrow-right"></div>
+    <div class="arrow-left"></div>
+
+<div id = "IDE">
+<h1> A Full Fledged IDE  </h1>
+<p>Nunc sodales pharetra urna non rhoncus. Praesent id dignissim mi. Aenean ipsum lacus, vulputate in odio eu, finibus facilisis erat. Donec luctus sem a ex tristique, in dictum tellus aliquet. Etiam vitae turpis at est elementum bibendum.
+Nunc sodales pharetra urna non rhoncus. Praesent id dignissim mi. Aenean ipsum lacus, vulputate in odio eu, finibus facilisis erat. Donec luctus sem a ex tristique, in dictum tellus aliquet. Etiam vitae turpis at est elementum bibendum.
+</p>
+<img src="./images/IDE.png">
+</div>
+</body>
+
+</html>

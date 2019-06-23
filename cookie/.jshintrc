@@ -1,0 +1,34 @@
+{
+	"boss": true,
+	"browser": true,
+	"curly": true,
+	"eqeqeq": true,
+	"eqnull": true,
+	"expr": true,
+	"evil": true,
+	"newcap": true,
+	"noarg": true,
+	"undef": true,
+	"globals": {
+		"define": true,
+		"jQuery": true,
+		"require": true
+	}
+}
+{
+	"boss": true,
+	"browser": true,
+	"curly": true,
+	"eqeqeq": true,
+	"eqnull": true,
+	"expr": true,
+	"evil": true,
+	"newcap": true,
+	"noarg": true,
+	"undef": true,
+	"globals": {
+		"define": true,
+		"jQuery": true,
+		"require": true
+	}
+}
