@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Quantitate</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Overpass" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="./js/jquery-connections/jquery.connections.js"></script>
+</head>
+
+<body>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="./js/nodescript.js"></script>
+    <div id="top">
+        <div id="navbar">
+            <svg id="logo" version="1.1" viewBox="25 45 160 210" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                        <metadata>
+                        <rdf:RDF>
+                        <cc:Work rdf:about="">
+                        <dc:format>image/svg+xml</dc:format>
+                        <dc:title/>
+                        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+                        </cc:Work>
+                        </rdf:RDF>
+                        </metadata>
+                        <g>
+                        <path d="m43.465 98.328-18.974 17.614l-0.1512-30.242 43.845-42.333-0.60419 155.95 18.974-17.614 0.15119 30.242-43.845 42.333z"/>
+                        <path d="m92.715 97.911-18.974 17.614-0.1512-30.242l43.845-42.333-0.60419 155.95 18.974-17.614 0.15119 30.242-43.845 42.333z"/>
+                        <path d="m142.46 97.684-18.974 17.614-0.1512-30.242 43.845-42.333-0.60419 155.95 18.974-17.614 0.15119 30.242-43.845 42.333z"/>
+                        </g>
+        </svg>
+            <span style="float:right">
+          <!-- <h3>Get Started</h3> -->
+          <!-- <h3>About</h3> -->
+         
+      </span>
+        </div>
+        <div id="content">
+            <h1>Quantitate Trading</h1>
+            <h4>A freely available product for developing, backtesting and paper-testing stock trading algorithms. Coming this month</h4>
+        </div>
+    </div>
+    <div class="box">
+        <h2>The Developer-Oriented Stock-Trading Algorithms IDE</h2>
+        <div class="wrapper">
+        </div>
+    </div>
+    <div id="graphing">
+        <div class='cont'>
+            <div id="search">
+                <h1>Minutely Data for 10000+ tickers</h1>
+                <div id="container" style="height: 400px; min-width: 310px"></div>
+
+            </div>
+            <div id="container"></div>
+            <table>
+                <tr>
+                    <td>
+                        <h5>Why is this important?</h5>
+                        <p>
+                            The modern exchange is dominated by quantitative and high frequency traders (HFT). In fact, JP Morgan estimates that just 10% of trading is regular stock picking. We at Quantitate can empower you to modernize your trading strategy
+                        </p>
+                    </td>
+                    <td>
+
+                        <h5>Backtests Identical to the Market</h5>
+                        <p>
+                            In addition to minutely data we recorded every price update that occurred on the IEX exchange since December of 2016. We feed this information directly to your algorithms ensuring that they function properly when deployed.
+                        </p>
+                    </td>
+            </table>
+        </div>
+    </div>
+    <div id="features">
+        <table>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="feature" id="one">
+                        <h1>Extensive Datasets</h1>
+                        <p>
+                            We offer almost three years of minutely data, five years of daily data and fundamental data for over 10000 companies. 
+                            We expect to add sentimental data and other alternative datasets in the coming months. 
+                        </p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+    </div>
+    <div class="feature" id="two">
+        <h1>Powerful Backtesting</h1>
+        <p>
+            By developing an extensive c++ backend we were able to create fast and powerful backtesting software while maintaining the ease of coding in Python. 
+            It is lightweight enough to run in our free online demo and serious users can download the app.
+        </p>
+    </div>
+    </td>
+    <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <div class="feature" id="three">
+                <h1>One-click Paper Trading</h1>
+                <p>
+                    With a single click one can deploy one's backtested algorith onto the market. 
+                    We use realtime price updates from the IEX exchange to power our paper trading capabilities and allow you to test the real-world effectiveness of your algorithms
+                </p>
+            </div>
+        </td>
+    </tr>
+    </table>
+    <script>
+        $('#one, #two').connections();
+        $('#two, #three').connections();
+        window.onresize = function() {
+            $('.feature').connections('remove');
+            $('#one, #two').connections();
+            $('#two, #three').connections();
+        }
+    </script>
+    </div>
+    <div class="arrow-right"></div>
+    <div class="arrow-left"></div>
+
+<div id = "IDE">
+    <div style="max-width: 1500px; width:100%;">
+        <h1> A Full Fledged IDE  </h1>
+        <p> We use a highly modified version of the Jupyter IDE which is directly integrated into our extensive backend code. It allows one to code, test, and deploy all from the same screen.
+            Monitor your deployed algorithms and check their performance from the dashboard. The coding process is simple, one simply writes a function that recieves the specified datasets and leverages it to set one's position. 
+            With one click the function is applied accross almost three years of data.
+        </p>
+        <div style = "width: 100%; display:flex; align-items: center; justify-content: center">
+        <img src="./images/IDE.png">
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
