@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>login</title>
+	<title>Sign Up</title>
 	<link href="./css/main.css" rel="stylesheet" type="text/css" media="all" />
 	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
@@ -12,15 +12,16 @@
 	<div class="main">
 		<div class="agile">
 			<div class="signin-form profile">
-				<h5>Login</h5>
-				<h3 class = "error hidden" id = "message"></h3>
+				<h5>Sign Up</h5>
+				<h3 class = "error hidden" id = "message">test</h3>
 				<div class="login-form">
-					<form action="/auth/login" method="post">
-						<input type="text" name="username" placeholder="Username or E-mail" required="">
+					<form action="/auth/signup" method="post" target="dummyframe">
+						<input type="text" name="email" placeholder="E-mail" required="">
+						<input type="text" name="username" placeholder="Username" required="">
+						<input type="text" name="name" placeholder="Full Name" required="">
 						<input type="password" name="password" placeholder="Password" required="">
-						<div class="tp">
-							<input type="submit" value="LOGIN" onClick="hide()">
-						</div>
+						<input type="password" name="passwordConf" placeholder="Confirm Password" required="">
+						<input type="submit" value="REGISTER" onClick="hide()">
 					</form>
 				</div>
 			</div>
